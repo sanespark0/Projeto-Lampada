@@ -338,15 +338,15 @@
                     <div class="card-title" style="justify-content:center;">🎮 REQUISITOS FUNCIONAIS</div>
                     <div class="rule-item"><div class="rule-id">RF01</div><div class="rule-text">Permitir ligar/desligar remotamente</div></div>
                     <div class="rule-item"><div class="rule-id">RF02</div><div class="rule-text">Acionar simultaneamente os 4 conjuntos</div></div>
-                    <div class="rule-item"><div class="rule-id">RF03</div><div class="rule-text">Permitir login de coordenador e professor</div></div>
-                    <div class="rule-item"><div class="rule-id">RF04</div><div class="rule-text">Escolher quais usuários recebem mensagem</div></div>
+                    <div class="rule-item"><div class="rule-id">RF03</div><div class="rule-text">Permitir o acionamento remoto através do protocolo MQTT</div></div>
+                    <div class="rule-item"><div class="rule-id">RF04</div><div class="rule-text">Salvar automaticamente o estado das lâmpadas na memória do ESP32</div></div>
                 </div>
                 <div class="card">
                     <div class="card-title" style="justify-content:center;">🔒 REQUISITOS NÃO FUNCIONAIS</div>
                     <div class="rule-item"><div class="rule-id">RNF01</div><div class="rule-text"><strong>Resistência</strong><br>Funcionamento contínuo por longos períodos</div></div>
                     <div class="rule-item"><div class="rule-id">RNF02</div><div class="rule-text"><strong>Eficiência</strong><br>Baixíssimo consumo de energia</div></div>
                     <div class="rule-item"><div class="rule-id">RNF03</div><div class="rule-text"><strong>Robustez</strong><br>SSR superdimensionado para a corrente total</div></div>
-                    <div class="rule-item"><div class="rule-id">RNF04</div><div class="rule-text"><strong>Latência Zero</strong><br>Tempo de resposta ≤ 1 segundo</div></div>
+                    <div class="rule-item"><div class="rule-id">RNF04</div><div class="rule-text"><strong>Baixa Latência </strong><br>Tempo de resposta ≤ 1 segundo</div></div>
                 </div>
             </div>
         </div></div>
@@ -423,7 +423,33 @@
                     <div class="tech-tag" style="display:block; margin-bottom:8px;">✅ Leitura dos Botões</div>
                     <div class="tech-tag" style="display:block; margin-bottom:8px;">✅ Controle das Lâmpadas (SSR)</div>
                     <div class="tech-tag" style="display:block;">✅ Persistência dos Dados</div>
-                    <code>void loop() {<br>  garantirWiFiConectado();<br>  garantirMQTTConectado();<br>  botaoInterruptor1.update();<br>  tratarLampadaBotao();<br>  salvarEstadoLampadas();<br>  publicarRespostaMQTT();<br>}</code>
+                    <code>void loop() {<br> garantirWiFiConectado();
+  garantirMQTTConectado();
+  loopMQTT();
+
+  botaoBoot.update();
+  botaoInterruptor1.update();
+  botaoInterruptor2.update();
+  botaoInterruptor3.update();
+  botaoInterruptor4.update();
+
+  cliqueBotao1 = botaoInterruptor1.fell();
+  cliqueBotao2 = botaoInterruptor2.fell();
+  cliqueBotao3 = botaoInterruptor3.fell();
+  cliqueBotao4 = botaoInterruptor4.fell();
+
+  tratarLampadaBotao();
+  salvarEstadoLampadas();
+  publicarRespostaMQTT();
+
+  lampada1.setEstado(estadoLampada1);
+  lampada1.update();
+  lampada2.setEstado(estadoLampada2);
+  lampada2.update();
+  lampada3.setEstado(estadoLampada3);
+  lampada3.update();
+  lampada4.setEstado(estadoLampada4);
+  lampada4.update();;<br>  publicarRespostaMQTT();<br>}</code>
                 </div>
             </div>
         </div></div>
